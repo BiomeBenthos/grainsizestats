@@ -13,7 +13,7 @@ ternary_plot <- function(type = NULL) {
   switch(
     type,
     gsm = {
-      NULL
+      ternary_base_gsm()
     },
     ssc = {
       ternary_base_ssc()
@@ -67,7 +67,7 @@ ternary_base <- function() {
 ternary_base_gsm <- function() {
 
   # Get every limits segments coordinates
-  xy_seg <- lapply(ssc_limits(), function(k) {
+  xy_seg <- lapply(gsm_limits(), function(k) {
     
     # Transform coordinates of limits into x and y coordinates
     x = apply(k, 1, ternary_x)
@@ -93,16 +93,16 @@ ternary_base_gsm <- function() {
 
 
   # Plot ticks
-  xy_ticks <- lapply(names(ssc_ticks()), function(k) {
+  xy_ticks <- lapply(names(gsm_ticks()), function(k) {
     
     # Transform coordinates of ticks into x and y coordinates
-    x = apply(ssc_ticks()[[k]][,-1], 1, ternary_x)
-    y = apply(ssc_ticks()[[k]][,-1], 1, ternary_y)
+    x = apply(gsm_ticks()[[k]][,-1], 1, ternary_x)
+    y = apply(gsm_ticks()[[k]][,-1], 1, ternary_y)
 
     xy <- data.frame(x = x,
                      y = y,
                      side = k,
-                     text = ssc_ticks()[[k]][,"text"])
+                     text = gsm_ticks()[[k]][,"text"])
   }) |>
     do.call(what = rbind, args = _)
 
@@ -118,6 +118,7 @@ ternary_base_gsm <- function() {
         text(as.numeric(x["x"]),
              as.numeric(x["y"])-meas()$ticks_lab,
              x["text"],
+             adj = c(0.5, 0.5),
              xpd = NA) # xpd = NA allows to put text everywhere on the plot (inside and outside the plot margin)
       },
       left = {
@@ -127,6 +128,7 @@ ternary_base_gsm <- function() {
                  y1 = as.numeric(x["y"]))
         text(as.numeric(x["x"])-meas()$ticks_lab,
              as.numeric(x["y"]),
+             adj = c(1, 0.5),
              x["text"],
              xpd = NA) # xpd = NA allows to put text everywhere on the plot (inside and outside the plot margin)
       }
@@ -137,20 +139,21 @@ ternary_base_gsm <- function() {
   ## Left margin
   text(x = 0.25 - meas()$axes_lab,
        y = 0.5,
-       "Sand %",
+       "Gravel %",
+       adj = c(1, 1),
        xpd = NA,
        srt = 60) # Rotation of text
 
   ## Bottom margin
   text(x = 0.5,
        y = 0 - meas()$axes_lab,
-       "Silt:Clay ratio",
+       "Sand:Mud ratio",
        xpd = NA)
 
   # Class labels
-  xy_class <- data.frame(x = apply(ssc_text()[,-1], 1, ternary_x),
-                         y = apply(ssc_text()[,-1], 1, ternary_y),
-                         text = ssc_text()$text)
+  xy_class <- data.frame(x = apply(gsm_text()[,-1], 1, ternary_x),
+                         y = apply(gsm_text()[,-1], 1, ternary_y),
+                         text = gsm_text()$text)
   text(xy_class$x,
        xy_class$y,
        xy_class$text,
