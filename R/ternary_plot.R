@@ -6,14 +6,14 @@
 #'
 #' @return
 
-ternary_plot <- function(type = NULL) {
+ternary_plot <- function(type = NULL, lan = "en") {
   
   ternary_base()
 
   switch(
     type,
     gsm = {
-      ternary_base_gsm()
+      ternary_base_gsm(lan)
     },
     ssc = {
       ternary_base_ssc()
@@ -64,7 +64,7 @@ ternary_base <- function() {
 }
 
 
-ternary_base_gsm <- function() {
+ternary_base_gsm <- function(lan) {
 
   # Get every limits segments coordinates
   xy_seg <- lapply(gsm_limits(), function(k) {
@@ -139,7 +139,7 @@ ternary_base_gsm <- function() {
   ## Left margin
   text(x = 0.25 - meas()$axes_lab,
        y = 0.5,
-       "Gravel %",
+       labels_gsm(lan)$left,
        adj = c(1, 1),
        xpd = NA,
        srt = 60) # Rotation of text
@@ -147,21 +147,22 @@ ternary_base_gsm <- function() {
   ## Bottom margin
   text(x = 0.5,
        y = 0 - meas()$axes_lab,
-       "Sand:Mud ratio",
+       labels_gsm(lan)$bottom,
        xpd = NA)
 
   # Class labels
-  xy_class <- data.frame(x = apply(gsm_text()[,-1], 1, ternary_x),
-                         y = apply(gsm_text()[,-1], 1, ternary_y),
-                         text = gsm_text()$text)
+  xy_class <- data.frame(x = apply(gsm_text(lan)[,-1], 1, ternary_x),
+                         y = apply(gsm_text(lan)[,-1], 1, ternary_y),
+                         text = gsm_text(lan)$text)
+  if(lan == "fr") text_size <- 0.6 else text_size <- 0.7
   text(xy_class$x,
        xy_class$y,
        xy_class$text,
-       cex = 0.7)
+       cex = text_size)
 
 }
 
-ternary_base_ssc <- function() {
+ternary_base_ssc <- function(lan) {
 
   # Get every limits segments coordinates
   xy_seg <- lapply(ssc_limits(), function(k) {

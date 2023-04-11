@@ -134,14 +134,11 @@ ssc_ticks <- function() {
 
 # 3D coordinates of text specifying classe of soil
 ## gravel-sand-mud
-gsm_text <- function() {
-
-  # Gravel coordinates (calculate silt and clay coordinates from sand)
-  gravel <- c(0.025, 0.025, 0.025, 0.025, 0.1, 0.1, 0.1, 0.1, 0.20, 0.20, 0.20, 0.5, 0.5, 0.34, 0.85) 
-  sand <- c(1/20, 0.3, 0.7, 19/20, 1/30, 0.3, 0.7, 14/15, 1/4, 0.7, 14/15, 1/4, 0.7, 14/15, 0.5)
-
+gsm_text <- function(lan) {
+  gravel <- soil_classes_gsm(lan)$gravel
+  sand <- soil_classes_gsm(lan)$sand
   data.frame(
-    text = c("Mud", "Sandy Mud", "Muddy Sand", "Sand", "         Slightly\n      Gravelly\n  Mud", "Slightly Gravelly\nSandy Mud", "Slightly Gravelly\nMuddy Sand", "Slightly\n     Gravelly\n        Sand", "Gravelly Mud", "Gravelly Muddy Sand", "   Gravelly\n    Sand", "Muddy Gravel", "Muddy\nSandy\nGravel", "  Sandy\n     Gravel", "Gravel"),
+    text = soil_classes_gsm(lan)$text,
     mud = (1-gravel-((1-gravel)*sand)),
     sand = (1-gravel)*sand,
     gravel = gravel
@@ -185,4 +182,44 @@ gsm_transform  <- function(x) {
     x[1] <- (1-x[3]) * (x[1]/x1x2)
   }
   return(x)
+}
+
+soil_classes_gsm <- function(lan) {
+  switch(
+    lan,
+    "en" = {
+      list(
+        # Gravel coordinates (calculate silt and clay coordinates from sand)
+        gravel = c(0.025, 0.025, 0.025, 0.025, 0.1, 0.1, 0.1, 0.1, 0.20, 0.20, 0.20, 0.5, 0.5, 0.34, 0.85), 
+        sand = c(1/20, 0.3, 0.7, 19/20, 1/30, 0.3, 0.7, 14/15, 1/4, 0.7, 14/15, 1/4, 0.7, 14/15, 0.5),
+        text = c("Mud", "Sandy Mud", "Muddy Sand", "Sand", "         Slightly\n      Gravelly\n  Mud", "Slightly Gravelly\nSandy Mud", "Slightly Gravelly\nMuddy Sand", "Slightly\n     Gravelly\n        Sand", "Gravelly Mud", "Gravelly Muddy Sand", "   Gravelly\n    Sand", "Muddy Gravel", "Muddy\nSandy\nGravel", "  Sandy\n     Gravel", "Gravel")
+      )
+    },
+    "fr" = {
+      list(
+        # Gravel coordinates (calculate silt and clay coordinates from sand)
+        gravel = c(0.025, 0.025, 0.025, 0.025, 0.1, 0.1, 0.1, 0.1, 0.20, 0.20, 0.20, 0.5, 0.5, 0.34, 0.85), 
+        sand = c(1/20, 0.3, 0.7, 19/20, 1/30, 0.3, 0.7, 14/15, 1/4, 0.7, 14/15, 1/4, 0.7, 14/15, 0.5),
+        text = c("Boue", "Boue sableuse", "Sable boueux", "Sable", "         Boue\n      légèrement\n  graveleuse", "Boue sableuse\nlégèrement graveleuse", "Sable boueux\nlégèrement graveleuse", "Sable\n     légèrement\n         graveleux", "Boue graveleuse", "Sable graveleux boueux", "  Sable\n      graveleux", "Gravier boueux", "Gravier\nsableux\nboueux", "  Gravier\n      sableux", "Gravier")
+      )
+    }
+  )
+}
+
+labels_gsm <- function(lan) {
+  switch(
+    lan,
+    "en" = {
+      list(
+        bottom = "Sand:Mud Ratio",
+        left = "%Gravel"
+      )
+    },
+    "fr" = {
+      list(
+        bottom = "Ratio sable:boue",
+        left = "% de Gravier"
+      )
+    }
+  )
 }
