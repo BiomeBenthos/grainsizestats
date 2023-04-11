@@ -146,13 +146,13 @@ gsm_text <- function(lan) {
 }
 
 ## sand-silt-clay
-ssc_text <- function() {
+ssc_text <- function(lan) {
   
   # Sand coordinates (calculate silt and clay coordinates from sand)
-  sand <- c(0.05, 0.05, 0.05, 0.3, 0.3, 0.3, 0.55, 0.55, 0.55, 0.92) 
+  sand <- soil_classes_ssc(lan)$sand
   
   data.frame(
-    text = c("Clay", "Mud", "Silt", "Sandy Clay", "Sandy Mud", "Sandy Silt", "Clavey Sand", "Muddy Sand", "Silty Sand", "Sand"),
+    text = soil_classes_ssc(lan)$text,
     clay = (1-sand)*c(5/6, 1/2, 1/6, 5/6, 1/2, 1/6, 5/6, 1/2, 1/6, 1/2),
     silt = (1-sand)*c(1/6, 1/2, 5/6, 1/6, 1/2, 5/6, 1/6, 1/2, 5/6, 1/2),
     sand = sand
@@ -189,7 +189,7 @@ soil_classes_gsm <- function(lan) {
     lan,
     "en" = {
       list(
-        # Gravel coordinates (calculate silt and clay coordinates from sand)
+        # Gravel and sand coordinates (calculate mud coordinates from them)
         gravel = c(0.025, 0.025, 0.025, 0.025, 0.1, 0.1, 0.1, 0.1, 0.20, 0.20, 0.20, 0.5, 0.5, 0.34, 0.85), 
         sand = c(1/20, 0.3, 0.7, 19/20, 1/30, 0.3, 0.7, 14/15, 1/4, 0.7, 14/15, 1/4, 0.7, 14/15, 0.5),
         text = c("Mud", "Sandy Mud", "Muddy Sand", "Sand", "         Slightly\n      Gravelly\n  Mud", "Slightly Gravelly\nSandy Mud", "Slightly Gravelly\nMuddy Sand", "Slightly\n     Gravelly\n        Sand", "Gravelly Mud", "Gravelly Muddy Sand", "   Gravelly\n    Sand", "Muddy Gravel", "Muddy\nSandy\nGravel", "  Sandy\n     Gravel", "Gravel")
@@ -197,10 +197,30 @@ soil_classes_gsm <- function(lan) {
     },
     "fr" = {
       list(
-        # Gravel coordinates (calculate silt and clay coordinates from sand)
+        # Gravel and sand coordinates (calculate mud coordinates from them)
         gravel = c(0.025, 0.025, 0.025, 0.025, 0.1, 0.1, 0.1, 0.1, 0.20, 0.20, 0.20, 0.5, 0.5, 0.34, 0.85), 
         sand = c(1/20, 0.3, 0.7, 19/20, 1/30, 0.3, 0.7, 14/15, 1/4, 0.7, 14/15, 1/4, 0.7, 14/15, 0.5),
         text = c("Boue", "Boue sableuse", "Sable boueux", "Sable", "         Boue\n      légèrement\n  graveleuse", "Boue sableuse\nlégèrement graveleuse", "Sable boueux\nlégèrement graveleuse", "Sable\n     légèrement\n         graveleux", "Boue graveleuse", "Sable graveleux boueux", "  Sable\n      graveleux", "Gravier boueux", "Gravier\nsableux\nboueux", "  Gravier\n      sableux", "Gravier")
+      )
+    }
+  )
+}
+
+soil_classes_ssc <- function(lan) {
+  switch(
+    lan,
+    "en" = {
+      list(
+        # Sand coordinates (calculate silt and clay coordinates from sand)
+        sand = c(0.05, 0.05, 0.05, 0.3, 0.3, 0.3, 0.55, 0.55, 0.55, 0.92),
+        text = c("Clay", "Mud", "Silt", "Sandy Clay", "Sandy Mud", "Sandy Silt", "Clavey Sand", "Muddy Sand", "Silty Sand", "Sand")
+      )
+    },
+    "fr" = {
+      list(
+        # Sand coordinates (calculate silt and clay coordinates from sand)
+        sand = c(0.05, 0.05, 0.05, 0.3, 0.3, 0.3, 0.55, 0.55, 0.55, 0.92),
+        text = c("Argile", "Boue", "Limon", "Argile sableuse", "Boue sableuse", "Limon sableux", "Sable argileux", "Sable boueux", "Sable limoneux", "Sable")
       )
     }
   )
@@ -218,7 +238,25 @@ labels_gsm <- function(lan) {
     "fr" = {
       list(
         bottom = "Ratio sable:boue",
-        left = "% de Gravier"
+        left = "% de gravier"
+      )
+    }
+  )
+}
+
+labels_ssc <- function(lan) {
+  switch(
+    lan,
+    "en" = {
+      list(
+        bottom = "Silt:Clay Ratio",
+        left = "%Sand"
+      )
+    },
+    "fr" = {
+      list(
+        bottom = "Ratio limon:argile",
+        left = "% de sable"
       )
     }
   )

@@ -16,7 +16,7 @@ ternary_plot <- function(type = NULL, lan = "en") {
       ternary_base_gsm(lan)
     },
     ssc = {
-      ternary_base_ssc()
+      ternary_base_ssc(lan)
     }
   )
 }
@@ -215,6 +215,7 @@ ternary_base_ssc <- function(lan) {
                  y1 = as.numeric(x["y"])-meas()$ticks)
         text(as.numeric(x["x"]),
              as.numeric(x["y"])-meas()$ticks_lab,
+             adj = c(0.5, 0.5),
              x["text"],
              xpd = NA) # xpd = NA allows to put text everywhere on the plot (inside and outside the plot margin)
       },
@@ -226,6 +227,7 @@ ternary_base_ssc <- function(lan) {
         text(as.numeric(x["x"])-meas()$ticks_lab,
              as.numeric(x["y"]),
              x["text"],
+             adj = c(1, 0.5),
              xpd = NA) # xpd = NA allows to put text everywhere on the plot (inside and outside the plot margin)
       }
     )
@@ -235,23 +237,25 @@ ternary_base_ssc <- function(lan) {
   ## Left margin
   text(x = 0.25 - meas()$axes_lab,
        y = 0.5,
-       "Sand %",
+       labels_ssc(lan)$left,
+       adj = c(1, 1),
        xpd = NA,
        srt = 60) # Rotation of text
 
   ## Bottom margin
   text(x = 0.5,
        y = 0 - meas()$axes_lab,
-       "Silt:Clay ratio",
+       labels_ssc(lan)$bottom,
        xpd = NA)
 
   # Class labels
-  xy_class <- data.frame(x = apply(ssc_text()[,-1], 1, ternary_x),
-                         y = apply(ssc_text()[,-1], 1, ternary_y),
-                         text = ssc_text()$text)
+  xy_class <- data.frame(x = apply(ssc_text(lan)[,-1], 1, ternary_x),
+                         y = apply(ssc_text(lan)[,-1], 1, ternary_y),
+                         text = ssc_text(lan)$text)
+  if(lan == "fr") text_size <- 0.65 else text_size <- 0.7
   text(xy_class$x,
        xy_class$y,
        xy_class$text,
-       cex = 0.7)
+       cex = text_size)
 
 }
