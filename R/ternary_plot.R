@@ -2,20 +2,55 @@
 #' 
 #' Description
 #'
-#' @param
+#' @param TODO:
 #'
-#' @return
+#' @return plot
+#' @export
 
-ternary_plot <- function(type = NULL, lan = "en") {
+ternary_plot <- function(df, type = NULL, lan = "en", group_by = NULL, col, pch, alpha = 1, main = NULL, ...) {
   
-  ternary_base()
-
   switch(
     type,
     gsm = {
-      ternary_base_gsm(lan)
+      
+      if(any(df[,c("gravel", "sand", "mud")] > 1)) {
+        df$gravel <- df$gravel/100
+        df$sand <- df$sand/100
+        df$mud <- df$mud/100
+      }
+      
+      df[,"x"] <- apply(df[,c("mud", "sand", "gravel")],
+                        1,
+                        function(x) ternary_x(x, gsm = TRUE))
+      df[,"y"] <- apply(df[,c("mud", "sand", "gravel")],
+                        1,
+                        function(x) ternary_y(x, gsm = TRUE))
+      
+      ternary_base_gsm(lan)    
+
+      if(!is.null(group_by)) {
+        names(col) <- levels(factor(df[,group_by]))
+        col <- scales::alpha(col[factor(df[,group_by])], alpha)
+#        names(pch) <- levels(factor(df[,group_by]))
+#        pch <- pch[factor(df[,group_by])]
+      }
+
+      points(df$x, df$y,
+             pch = pch,
+             col = col)
+
+      if(!is.null(group_by)) {
+        legend("topleft",
+               legend = levels(factor(df[,group_by])),
+               pch = pch,
+               col = col[levels(factor(df[,group_by]))])
+      } else {
+        title(main = main)
+      }
+  
     },
     ssc = {
+      ternary_base()
       ternary_base_ssc(lan)
     }
   )
@@ -26,9 +61,9 @@ ternary_plot <- function(type = NULL, lan = "en") {
 #' 
 #' Description
 #'
-#' @param
+#' @param TODO: 
 #'
-#' @return 
+#' @return TODO: 
 
 ternary_base <- function() {
   
@@ -65,6 +100,8 @@ ternary_base <- function() {
 
 
 ternary_base_gsm <- function(lan) {
+
+  ternary_base()
 
   # Get every limits segments coordinates
   xy_seg <- lapply(gsm_limits(), function(k) {
@@ -163,6 +200,8 @@ ternary_base_gsm <- function(lan) {
 }
 
 ternary_base_ssc <- function(lan) {
+
+  ternary_base()
 
   # Get every limits segments coordinates
   xy_seg <- lapply(ssc_limits(), function(k) {

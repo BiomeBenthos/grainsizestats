@@ -200,7 +200,21 @@ soil_classes_gsm <- function(lan) {
         # Gravel and sand coordinates (calculate mud coordinates from them)
         gravel = c(0.025, 0.025, 0.025, 0.025, 0.1, 0.1, 0.1, 0.1, 0.20, 0.20, 0.20, 0.5, 0.5, 0.34, 0.85), 
         sand = c(1/20, 0.3, 0.7, 19/20, 1/30, 0.3, 0.7, 14/15, 1/4, 0.7, 14/15, 1/4, 0.7, 14/15, 0.5),
-        text = c("Boue", "Boue sableuse", "Sable boueux", "Sable", "         Boue\n      légèrement\n  graveleuse", "Boue sableuse\nlégèrement graveleuse", "Sable boueux\nlégèrement graveleuse", "Sable\n     légèrement\n         graveleux", "Boue graveleuse", "Sable graveleux boueux", "  Sable\n      graveleux", "Gravier boueux", "Gravier\nsableux\nboueux", "  Gravier\n      sableux", "Gravier")
+        text = c("Limon et\nargile",
+                 "Limon et argile avec sable",
+                 "Sable avec limon et argile",
+                 "Sable",
+                 "           Limon et\n      argile avec\n   un peu \nde gravier",
+                 "Limon et argile avec sable\n et un peu de gravier",
+                 "Sable avec limon et argile\net un peu de gravier",
+                 " Sable avec\n   un peu\n          de gravier",
+                 "Limon et argile avec gravier",
+                 "Sable avec gravier, limon et argile",
+                 "Sable\n   avec\n        gravier",
+                 "Gravier avec\nlimon et argile",
+                 "Gravier avec\nsable, limon et argile",
+                 "Gravier\n   avec\n       sable",
+                 "Gravier")
       )
     }
   )
@@ -237,7 +251,7 @@ labels_gsm <- function(lan) {
     },
     "fr" = {
       list(
-        bottom = "Ratio sable:boue",
+        bottom = "ratio sable:limon et argile",
         left = "% de gravier"
       )
     }
