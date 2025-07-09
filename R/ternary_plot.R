@@ -44,10 +44,8 @@ ternary_plot <- function(df, type = NULL, lan = "en", group_by = NULL, col, pch,
                legend = levels(factor(df[,group_by])),
                pch = pch,
                col = col[levels(factor(df[,group_by]))])
-      } else {
-        title(main = main)
       }
-  
+      title(main = main)
     },
     ssc = {
       ternary_base()
